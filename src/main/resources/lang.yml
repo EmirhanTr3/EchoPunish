@@ -1,0 +1,79 @@
+# Silent is appended to the end of the broadcast string.
+silent: " <gray>(Silent)</gray>"
+
+warn:
+  exempt: "<error>You cannot warn this player.</error>"
+  broadcast: "<primary><secondary><player></secondary> has been warned by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been warned."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+kick:
+  exempt: "<error>You cannot kick this player.</error>"
+  broadcast: "<primary><secondary><player></secondary> has been kicked by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been kicked."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+mute:
+  exempt: "<error>You cannot mute this player.</error>"
+  not: "<error><player> is not muted.</error>"
+  broadcast: "<primary><secondary><player></secondary> has been muted by <secondary><mod></secondary> for <secondary><duration></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been muted."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Duration: <secondary><duration></secondary> (<secondary><timeleft></secondary>)"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+ban:
+  exempt: "<error>You cannot ban this player.</error>"
+  not: "<error><player> is not banned.</error>"
+  broadcast: "<primary><secondary><player></secondary> has been banned by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been banned."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+tempban:
+  exempt: "<error>You cannot ban this player.</error>"
+  broadcast: "<primary><secondary><player></secondary> has been temporarily banned by <secondary><mod></secondary> for <secondary><duration></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been temporarily banned."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Duration: <secondary><duration></secondary> (<secondary><timeleft></secondary>)"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+banip:
+  exempt: "<error>You cannot ban this player.</error>"
+  not: "<error><player> is not ip banned.</error>"
+  broadcast: "<primary><secondary><player></secondary> has been ip banned by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been ip banned."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+tempbanip:
+  exempt: "<error>You cannot ban this player.</error>"
+  broadcast: "<primary><secondary><player></secondary> has been temporarily ip banned by <secondary><mod></secondary> for <secondary><duration></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been temporarily ip banned."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Duration: <secondary><duration></secondary> (<secondary><timeleft></secondary>)"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+
+unwarn:
+  broadcast: "<primary><secondary><player></secondary> has been unwarned by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+unmute:
+  broadcast: "<primary><secondary><player></secondary> has been unmuted by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been unmuted."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
+unban:
+  broadcast: "<primary><secondary><player></secondary> has been unbanned by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+unbanip:
+  broadcast: "<primary><secondary><player></secondary> has been unipbanned by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
