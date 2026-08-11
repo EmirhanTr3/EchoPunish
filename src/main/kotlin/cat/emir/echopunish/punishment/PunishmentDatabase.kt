@@ -90,7 +90,6 @@ class PunishmentDatabase(val plugin: EchoPunish, name: String) : ExposedFileData
 
     private fun rowToPunishment(row: ResultRow?): ReadOnlyPunishment? {
         if (row == null) return null
-        println(row[PunishmentsTable.chatContext])
         return ReadOnlyPunishment(
             id = row[PunishmentsTable.id],
             type = Type.valueOf(row[PunishmentsTable.type]),

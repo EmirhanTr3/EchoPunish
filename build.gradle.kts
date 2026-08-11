@@ -7,6 +7,9 @@ plugins {
     id("de.eldoria.plugin-yml.paper") version "0.9.0"
 }
 
+group = "cat.emir"
+version = "1.0.1"
+
 repositories {
     mavenLocal()
     mavenCentral()
@@ -20,7 +23,7 @@ dependencies {
     implementation("com.github.stefvanschie.inventoryframework:IF:0.12.0")
 
     // for echolib
-    implementation("cat.emir:EchoLib:1.1.2")
+    implementation("cat.emir:EchoLib:1.1.3")
     paperLibrary("org.spongepowered:configurate-yaml:4.2.0")
     paperLibrary("org.spongepowered:configurate-extra-kotlin:4.2.0")
     paperLibrary("io.github.classgraph:classgraph:4.8.179")

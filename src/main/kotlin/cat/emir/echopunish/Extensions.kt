@@ -63,20 +63,6 @@ fun EchoCommand<*>.ifNotExempt(
         }
 }
 
-fun CommandContext<CommandSourceStack>.getOfflinePlayer(name: String): OfflinePlayer? {
-    val player = this.getArgument(name, PlayerProfileListResolver::class.java).resolve(this.source)
-        .firstOrNull()
-        ?.id
-        ?.let { EchoPunish.instance.server.getOfflinePlayer(it) }
-
-    if (player == null) {
-        this.source.sender.sendMessage("<red>No player was found</red>")
-        return null
-    }
-
-    return player
-}
-
 val OfflinePlayer.nameOrUniqueId: String
     get() = this.name ?: this.uniqueId.toString()
 

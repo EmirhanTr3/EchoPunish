@@ -2,21 +2,21 @@ package cat.emir.echopunish.commands
 
 import cat.emir.echopunish.uis.HistoryGUI
 import cat.emir.echolib.command.EchoCommand
+import cat.emir.echolib.command.arguments.CachedOfflinePlayerArgument
+import cat.emir.echolib.command.arguments.getOfflinePlayer
 import cat.emir.echolib.command.getPlayer
 import cat.emir.echolib.extensions.toComponent
 import cat.emir.echopunish.EchoPunish
-import cat.emir.echopunish.getOfflinePlayer
 import cat.emir.echopunish.nameOrUniqueId
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import io.papermc.paper.command.brigadier.CommandSourceStack
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 
 class HistoryCommand(plugin: EchoPunish) : EchoCommand<EchoPunish>(plugin) {
     override fun getCommand(): LiteralArgumentBuilder<CommandSourceStack> {
         return command("history") {
             requires { it.sender.hasPermission("echopunish.history") }
-            argument("player", ArgumentTypes.playerProfiles()) {
+            argument("player", CachedOfflinePlayerArgument(true)) {
                 executes(::execute)
             }
         }
