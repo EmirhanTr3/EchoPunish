@@ -66,6 +66,11 @@ tempbanip:
 
 unwarn:
   broadcast: "<primary><secondary><player></secondary> has been unwarned by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
+  message:
+    - "<primary>You have been unwarned."
+    - "<primary>Moderator: <secondary><mod>"
+    - "<primary>Reason: <secondary><reason>"
+    - "<gray>#<id></gray>"
 unmute:
   broadcast: "<primary><secondary><player></secondary> has been unmuted by <secondary><mod></secondary> for <secondary><reason></secondary></primary>"
   message:

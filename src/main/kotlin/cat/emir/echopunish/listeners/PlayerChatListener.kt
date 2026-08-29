@@ -10,7 +10,7 @@ import org.bukkit.event.EventPriority
 
 class PlayerChatListener(val plugin: EchoPunish) : EchoListener(plugin) {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onChat(event: AsyncChatEvent) {
         val player = event.player
         val currentMute = plugin.punishmentDatabase.getCurrentMute(player.uniqueId)
@@ -21,7 +21,7 @@ class PlayerChatListener(val plugin: EchoPunish) : EchoListener(plugin) {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onChatContext(event: AsyncChatEvent) {
         val player = event.player
         val message = MiniMessage.miniMessage().serialize(event.renderer().render(player, player.displayName(), event.message(), Audience.empty()))

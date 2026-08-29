@@ -19,7 +19,8 @@ open class Punishment(
     val duration: Duration? = null,
     val issuedAt: Instant = Instant.now(),
     val reason: String,
-    val chatContext: List<String>? = null
+    val chatContext: List<String>? = null,
+    val targetPunishmentId: String? = null
 ) {
     val plugin = EchoPunish.instance
     val player = uuid?.let { plugin.server.getOfflinePlayer(it) }
@@ -31,6 +32,11 @@ open class Punishment(
             val remaining = Duration.between(Instant.now(), expiresAt)
             return if (remaining.isNegative) Duration.ZERO else remaining
         }
+    val targetPunishment: ReadOnlyPunishment?
+        get() = targetPunishmentId?.let { plugin.punishmentDatabase.getPunishment(it) }
+    val isUnwarned: Boolean
+        get() = type == Type.WARN && plugin.punishmentDatabase.getAllPunishments().values
+            .any { it.type == Type.UNWARN && it.targetPunishmentId == id }
 
     enum class Type {
         WARN,
@@ -40,6 +46,7 @@ open class Punishment(
         TEMPBAN,
         BANIP,
         TEMPBANIP,
+        UNWARN,
         UNMUTE,
         UNBAN,
         UNBANIP
@@ -71,7 +78,7 @@ open class Punishment(
 
         if (silent) {
             val possiblePermissions = when (type) {
-                Type.WARN -> listOf("warn")
+                Type.WARN, Type.UNWARN -> listOf("warn")
                 Type.KICK -> listOf("kick")
                 Type.MUTE, Type.UNMUTE -> listOf("mute")
                 Type.BAN -> listOf("ban")
@@ -84,7 +91,7 @@ open class Punishment(
             plugin.server.onlinePlayers
                 .filter { player ->
                     possiblePermissions.any {
-                        player.hasPermission(it)
+                        player.hasPermission("echopunish.$it")
                     }
                 }
                 .forEach { it.sendMessage(broadcast) }

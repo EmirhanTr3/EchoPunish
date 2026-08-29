@@ -5,6 +5,7 @@ import cat.emir.echolib.extensions.toComponent
 import cat.emir.echolib.extensions.toReadableString
 import cat.emir.echopunish.EchoPunish
 import cat.emir.echopunish.punishment.ReadOnlyPunishment
+import cat.emir.echopunish.utils.MiniMessageUtils
 import io.papermc.paper.dialog.Dialog
 import io.papermc.paper.registry.data.dialog.ActionButton
 import io.papermc.paper.registry.data.dialog.DialogBase
@@ -39,7 +40,7 @@ class PunishmentInfoDialog(val plugin: EchoPunish, val viewer: Player, val punis
                             if (punishment.duration != null)
                                 "<primary>Duration:</primary> <secondary>${punishment.duration.toReadableString(false, ", ")}</secondary>"
                             else null,
-                            "<primary>Reason:</primary> <secondary>${punishment.reason}",
+                            "<primary>Reason:</primary> <secondary>${MiniMessageUtils.convertColorToMiniMessage(punishment.reason)}",
                             "<primary>Issued At:</primary> <secondary>${dateTimeFormatter.format(punishment.issuedAt)} <primary>(</primary>${punishment.issuedAt.getTimeAgo()}<primary>)</primary></secondary>",
                             "",
                             if (!punishment.chatContext.isNullOrEmpty())

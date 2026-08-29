@@ -42,6 +42,9 @@ class PunishmentDatabase(val plugin: EchoPunish, name: String) : ExposedFileData
         val reason = text("reason")
         val chatContext = text("chat_context").nullable()
         val ip = text("ip").nullable()
+        val targetPunishmentId = varchar("target_punishment_id", 15)
+            .references(id, onDelete = ReferenceOption.SET_NULL)
+            .nullable()
 
         override val primaryKey = PrimaryKey(id)
     }
@@ -68,6 +71,7 @@ class PunishmentDatabase(val plugin: EchoPunish, name: String) : ExposedFileData
                 it[issuedAt] = punishment.issuedAt.toEpochMilli()
                 it[reason] = punishment.reason
                 it[chatContext] = punishment.chatContext?.let { pChatContext -> Gson().toJson(pChatContext) }
+                it[targetPunishmentId] = punishment.targetPunishmentId
             }
 
             punishments[punishment.id] = makeReadOnly(punishment)
@@ -84,7 +88,8 @@ class PunishmentDatabase(val plugin: EchoPunish, name: String) : ExposedFileData
             duration = punishment.duration,
             issuedAt = punishment.issuedAt,
             reason = punishment.reason,
-            chatContext = punishment.chatContext
+            chatContext = punishment.chatContext,
+            targetPunishmentId = punishment.targetPunishmentId
         )
     }
 
@@ -100,6 +105,7 @@ class PunishmentDatabase(val plugin: EchoPunish, name: String) : ExposedFileData
             issuedAt = Instant.ofEpochMilli(row[PunishmentsTable.issuedAt]),
             reason = row[PunishmentsTable.reason],
             chatContext = row[PunishmentsTable.chatContext]?.let { Gson().fromJson(it, object : TypeToken<List<String>>(){}.type) },
+            targetPunishmentId = row[PunishmentsTable.targetPunishmentId]
         )
     }
 

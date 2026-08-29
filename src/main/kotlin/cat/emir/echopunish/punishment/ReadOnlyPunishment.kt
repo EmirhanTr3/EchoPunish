@@ -14,8 +14,9 @@ class ReadOnlyPunishment(
     duration: Duration?,
     issuedAt: Instant,
     reason: String,
-    chatContext: List<String>?
-) : Punishment(id, type, uuid, ip, modUuid, duration, issuedAt, reason, chatContext) {
+    chatContext: List<String>?,
+    targetPunishmentId: String?
+) : Punishment(id, type, uuid, ip, modUuid, duration, issuedAt, reason, chatContext, targetPunishmentId) {
 
     @Deprecated("this is a read only punishment and cannot be executed, will throw an error")
     override fun execute(silent: Boolean) {

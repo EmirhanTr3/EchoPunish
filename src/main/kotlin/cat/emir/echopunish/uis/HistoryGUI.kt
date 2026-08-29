@@ -17,6 +17,8 @@ import cat.emir.echolib.extensions.toReadableString
 import cat.emir.echopunish.EchoPunish
 import cat.emir.echopunish.nameOrUniqueId
 import cat.emir.echopunish.punishment.Punishment.Type
+import cat.emir.echopunish.punishment.ReadOnlyPunishment
+import cat.emir.echopunish.utils.MiniMessageUtils
 import com.github.stefvanschie.inventoryframework.pane.Pane
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
@@ -75,8 +77,20 @@ class HistoryGUI(val plugin: EchoPunish, val viewer: Player, val target: Offline
                 else -> Type.entries.toList()
             }
 
-            val prefixGuiItems = plugin.punishmentDatabase.getAllPunishments(target.uniqueId).values
+            val punishments = plugin.punishmentDatabase.getAllPunishments(target.uniqueId)
+
+            val warnMap = mutableMapOf<ReadOnlyPunishment, ReadOnlyPunishment>()
+            punishments.values.forEach { punishment ->
+                if (punishment.type == Type.WARN) {
+                    val unwarn = punishments.values.find { it.type == Type.UNWARN && it.targetPunishmentId == punishment.id }
+                        ?: return@forEach
+                    warnMap[punishment] = unwarn
+                }
+            }
+
+            val prefixGuiItems = punishments.values
                 .filter { typesToRender.contains(it.type) }
+                .filter { it.type != Type.UNWARN }
                 .sortedByDescending { it.issuedAt }
                 .map { punishment ->
                     val material = when (punishment.type) {
@@ -87,6 +101,7 @@ class HistoryGUI(val plugin: EchoPunish, val viewer: Player, val target: Offline
                         Type.TEMPBAN -> Material.RED_DYE
                         Type.BANIP -> Material.BLACK_DYE
                         Type.TEMPBANIP -> Material.GRAY_DYE
+                        Type.UNWARN -> Material.BARRIER
                         Type.UNMUTE -> Material.YELLOW_DYE
                         Type.UNBAN -> Material.MAGENTA_DYE
                         Type.UNBANIP -> Material.LIGHT_GRAY_DYE
@@ -100,6 +115,7 @@ class HistoryGUI(val plugin: EchoPunish, val viewer: Player, val target: Offline
                         Type.TEMPBAN -> "<red>Tempban"
                         Type.BANIP -> "<dark_gray>IP Ban"
                         Type.TEMPBANIP -> "<gray>IP Tempban"
+                        Type.UNWARN -> "<red>Shouldn't Exist"
                         Type.UNMUTE -> "<yellow>Unmute"
                         Type.UNBAN -> "<#ffaaff>Unban"
                         Type.UNBANIP -> "<gray>IP Unban"
@@ -110,8 +126,9 @@ class HistoryGUI(val plugin: EchoPunish, val viewer: Player, val target: Offline
 
                     val item = ItemStack(material).apply {
                         editMeta { meta ->
-                            val active = (currentMute != null && punishment.id == currentMute.id) ||
-                                    (currentBan != null && punishment.id == currentBan.id)
+                            val active = (punishment.type == Type.MUTE && currentMute != null && punishment.id == currentMute.id) ||
+                                    (punishment.type == Type.BAN && currentBan != null && punishment.id == currentBan.id) ||
+                                    (punishment.type == Type.WARN && !warnMap.containsKey(punishment))
 
                             meta.setEnchantmentGlintOverride(active)
 
@@ -131,7 +148,7 @@ class HistoryGUI(val plugin: EchoPunish, val viewer: Player, val target: Offline
                                             )
                                         }</secondary>"
                                     else null,
-                                    "<primary>Reason:</primary> <secondary>${punishment.reason}",
+                                    "<primary>Reason:</primary> <secondary>${MiniMessageUtils.convertColorToMiniMessage(punishment.reason)}",
                                     "<primary>Issued At:</primary> <secondary>${dateTimeFormatter.format(punishment.issuedAt)} <primary>(</primary>${punishment.issuedAt.getTimeAgo()}<primary>)</primary></secondary>",
                                     "",
                                     if (!punishment.chatContext.isNullOrEmpty())
@@ -139,6 +156,21 @@ class HistoryGUI(val plugin: EchoPunish, val viewer: Player, val target: Offline
                                     else null,
                                     "<dark_gray>ID: ${punishment.id}"
                                 )
+                                    .toMutableList()
+                                    .apply {
+                                        if (punishment.type == Type.WARN && !active) {
+                                            val unwarn = warnMap[punishment]!!
+                                            this.addAll(listOfNotNull(
+                                                "",
+                                                "<blue>Unwarn</blue>",
+                                                "<primary>Mod:</primary> <secondary>${unwarn.mod?.name ?: unwarn.modUuid ?: "Server"}</secondary>",
+                                                "<primary>Reason:</primary> <secondary>${MiniMessageUtils.convertColorToMiniMessage(unwarn.reason)}",
+                                                "<primary>Issued At:</primary> <secondary>${dateTimeFormatter.format(unwarn.issuedAt)} <primary>(</primary>${unwarn.issuedAt?.getTimeAgo()}<primary>)</primary></secondary>",
+                                                "",
+                                                "<dark_gray>ID: ${unwarn.id}",
+                                            ))
+                                        }
+                                    }
                                     .map { it.toComponent() }
                                     .map { it.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE) }
                             )
