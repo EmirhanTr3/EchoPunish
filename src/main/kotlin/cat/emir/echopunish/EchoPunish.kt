@@ -1,15 +1,16 @@
 package cat.emir.echopunish
 
 import cat.emir.echolib.EchoLang
-import cat.emir.echolib.EchoPlugin
 import cat.emir.echolib.command.CommandLib
 import cat.emir.echolib.event.EventLoader
+import cat.emir.echolib.lib.EchoLib
+import cat.emir.echolib.plugin.EchoPaperPlugin
 import cat.emir.echolib.theme.ThemeManager
 import cat.emir.echopunish.punishment.PunishmentDatabase
 import net.luckperms.api.LuckPerms
 import net.luckperms.api.LuckPermsProvider
 
-class EchoPunish : EchoPlugin() {
+class EchoPunish : EchoPaperPlugin() {
 
     companion object {
         lateinit var instance: EchoPunish
@@ -25,6 +26,7 @@ class EchoPunish : EchoPlugin() {
 
     override fun onEnable() {
         instance = this
+        EchoLib.init(this)
         luckPerms = LuckPermsProvider.get()
         lang.load()
         punishmentDatabase.load()
