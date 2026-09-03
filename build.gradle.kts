@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "cat.emir"
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     mavenLocal()
@@ -20,7 +20,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
     paperLibrary("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compileOnly("net.luckperms:api:5.5")
-    implementation("com.github.stefvanschie.inventoryframework:IF:0.12.0")
+    implementation("com.github.stefvanschie.inventoryframework:IF:0.12.1")
 
     // for echolib
     implementation("cat.emir:EchoLib:1.2.0")
